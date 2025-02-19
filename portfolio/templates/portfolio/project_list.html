@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project List</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .container {
+            width: 90%;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #222;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: transparent;
+            border: none;
+            color: #ffffff;
+            font-size: 20px;
+            cursor: pointer;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .close-btn:hover {
+            color: #cc0000;
+            transform: scale(1.2);
+        }
+
+        .add-project-btn {
+            background-color: #00cc66;
+            color: #ffffff;
+            font-size: 15px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .add-project-btn:hover {
+            background-color: #00994d;
+        }
+
+        .project-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .project-item {
+            background-color: #333;
+            border-radius: 8px;
+            width: 30%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 15px;
+        }
+
+        .project-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+        }
+
+        .project-item img {
+            width: 80%;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+
+        .project-item h2 {
+            font-size: 22px;
+            margin: 10px 0 5px;
+            text-align: center;
+        }
+
+        .project-item p {
+            color: #cccccc;
+            padding: 0 20px;
+            font-size: 15px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .action-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background-color: #222;
+            border-radius: 50%;
+            color: #00ff88;
+            text-decoration: none;
+            font-size: 20px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .action-button:hover {
+            background-color: #007f4b;
+            color: #ffffff;
+            transform: scale(1.2);
+        }
+
+        .action-button.delete:hover {
+            background-color: #990000;
+        }
+
+        @media (max-width: 768px) {
+            .project-item {
+                width: 48%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .project-item {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <button class="close-btn" onclick="window.location.href='{% url 'about_me' %}'" title="Back to About Me">
+            <i data-lucide="x"></i>
+        </button>
+
+        <h1>Projects</h1>
+
+        <a href="{% url 'add_project' %}" class="add-project-btn">
+            <i data-lucide="plus-circle"></i> Add Project
+        </a>
+
+        <div class="project-list">
+            {% for project in projects %}
+                <div class="project-item">
+                    <img src="{{ project.image.url }}" alt="{{ project.title }}">
+                    <h2>{{ project.name }}</h2>
+                    <p>{{ project.description }}</p>
+                    <div class="action-buttons">
+                        <a href="{{ project.link }}" target="_blank" class="action-button" title="View Project">
+                            <i data-lucide="external-link"></i>
+                        </a>
+                        <a href="{% url 'delete_project' project.id %}" class="action-button delete" title="Delete Project">
+                            <i data-lucide="trash-2"></i>
+                        </a>
+                        <a href="{% url 'edit_project' project.id %}" class="action-button" title="Edit Project">
+                            <i data-lucide="pencil"></i>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
